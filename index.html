@@ -34,13 +34,12 @@
       <h2>Flag App</h2>
     </header>
     <main class="container mt-4 d-flex flex-column align-items-center">
-      <div class="input d-flex col-sm-5">
-        <select
-          class="form-select col-sm-4"
-          aria-label="Default select example"
-          aria-placeholder="Select the Country"
-        ></select>
-        <button class="btn btn-danger ms-2">SELECT</button>
+      <div class="input d-flex col-sm-4 justify-content-center">
+        <select class="form-select col-sm-3" placeholder="Select the Country">
+          <option value="">Select the Country</option>
+        </select>
+        <button id="add" class="btn btn-primary ms-2">ADD</button>
+        <button id="clear" class="btn btn-danger ms-2">CLEAR</button>
       </div>
 
       <div

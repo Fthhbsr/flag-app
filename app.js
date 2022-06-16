@@ -2,6 +2,7 @@
 //*                     FLAG-APP
 //*=========================================================
 
+//fetch to selected country datas
 const fetchCountry = async (name) => {
   const url = `https://restcountries.com/v3.1/name/${name}`;
   try {
@@ -10,9 +11,7 @@ const fetchCountry = async (name) => {
       renderError(`Something went wrong:${res.status}`);
       throw new Error();
     }
-
     const data = await res.json();
-    // getAllCountries();
     renderCountry(data[0]);
   } catch (error) {
     console.log(error);
@@ -20,7 +19,7 @@ const fetchCountry = async (name) => {
 };
 
 const selectDiv = document.querySelector(".form-select");
-
+//  fetch to country names for the options
 const getAllCountries = async () => {
   const url = `https://restcountries.com/v3.1/all`;
   try {
@@ -32,7 +31,7 @@ const getAllCountries = async () => {
 
     const data = await res.json();
     let countryArray = [];
-    // console.log(data);
+
     data.forEach((country) => {
       const { common } = country.name;
       countryArray.push(common);
@@ -40,33 +39,41 @@ const getAllCountries = async () => {
     countryArray.sort().forEach((country) => {
       selectDiv.innerHTML += `<option>${country}</option>`;
     });
-    //console.log(countryArray);
-    // getAllCountries(data[0]);
-    // renderCountry(data[0]);
   } catch (error) {
     console.log(error);
   }
-  // console.log(country);
-
-  // console.log(common);
 };
 
-const btn = document.querySelector(".btn");
-btn.addEventListener("click", () => {
-  //if (selectDiv.value) fetchCountry(selectDiv.value);
-  selectDiv.value && fetchCountry(selectDiv.value);
+let countriesDiv = document.querySelector(".countries");
+let selectedCountryArr = [];
+const add = document.getElementById("add");
+
+// click to add button
+add.addEventListener("click", () => {
+  if (selectDiv.value && !selectedCountryArr.includes(selectDiv.value)) {
+    selectedCountryArr.push(selectDiv.value);
+    fetchCountry(selectDiv.value);
+  }
+  // selectDiv.value && fetchCountry(selectDiv.value);
+});
+
+const clear = document.getElementById("clear");
+// click to clear button
+clear.addEventListener("click", () => {
+  countriesDiv.innerHTML = ``;
+  selectedCountryArr = [];
 });
 
 const renderError = (err) => {
-  const countriesDiv = document.querySelector(".countries");
+  //const countriesDiv = document.querySelector(".countries");
 
   countriesDiv.innerHTML = `<h1 class="text-danger">${err}</h1>
     <img src="./img/404.png" alt="" />`;
 };
 
+// show the select country infos
 const renderCountry = (country) => {
-  // console.log(country);
-  const countriesDiv = document.querySelector(".countries");
+  //const countriesDiv = document.querySelector(".countries");
   const {
     capital,
     name: { common },
@@ -75,9 +82,6 @@ const renderCountry = (country) => {
     languages,
     currencies,
   } = country;
-  //   console.log(Object.values(currencies)[0].name);
-  //   console.log(Object.values(currencies)[0].symbol);
-  //   console.log(Object.values(languages)[0]);
 
   countriesDiv.innerHTML += `
 <div class="card shadow-lg" style="width: 18rem;">
@@ -100,7 +104,3 @@ const renderCountry = (country) => {
 };
 
 getAllCountries();
-
-// fetchCountry("turkey");
-// fetchCountry("usa");
-// fetchCountry("belgium");
