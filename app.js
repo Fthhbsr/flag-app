@@ -12,13 +12,50 @@ const fetchCountry = async (name) => {
     }
 
     const data = await res.json();
+    // getAllCountries();
     renderCountry(data[0]);
   } catch (error) {
     console.log(error);
   }
 };
 
-const getAllCountries = () => {};
+const selectDiv = document.querySelector(".form-select");
+
+const getAllCountries = async () => {
+  const url = `https://restcountries.com/v3.1/all`;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) {
+      renderError(`Something went wrong:${res.status}`);
+      throw new Error();
+    }
+
+    const data = await res.json();
+    let countryArray = [];
+    // console.log(data);
+    data.forEach((country) => {
+      const { common } = country.name;
+      countryArray.push(common);
+    });
+    countryArray.sort().forEach((country) => {
+      selectDiv.innerHTML += `<option>${country}</option>`;
+    });
+    //console.log(countryArray);
+    // getAllCountries(data[0]);
+    // renderCountry(data[0]);
+  } catch (error) {
+    console.log(error);
+  }
+  // console.log(country);
+
+  // console.log(common);
+};
+
+const btn = document.querySelector(".btn");
+btn.addEventListener("click", () => {
+  //if (selectDiv.value) fetchCountry(selectDiv.value);
+  selectDiv.value && fetchCountry(selectDiv.value);
+});
 
 const renderError = (err) => {
   const countriesDiv = document.querySelector(".countries");
@@ -28,7 +65,7 @@ const renderError = (err) => {
 };
 
 const renderCountry = (country) => {
-  console.log(country);
+  // console.log(country);
   const countriesDiv = document.querySelector(".countries");
   const {
     capital,
@@ -62,6 +99,8 @@ const renderCountry = (country) => {
 `;
 };
 
-fetchCountry("turkey");
-fetchCountry("usa");
-fetchCountry("belgium");
+getAllCountries();
+
+// fetchCountry("turkey");
+// fetchCountry("usa");
+// fetchCountry("belgium");
